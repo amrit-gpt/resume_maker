@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resume Builder</title>
-  <meta name="description" content="Build and customize your professional resume with live preview and PDF export">
+  <meta name="description" content="Build and export your professional resume to PDF">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -12,7 +12,7 @@
   <div class="app">
     <header class="header">
       <h1>Resume Builder</h1>
-      <p>Create your professional resume with live preview</p>
+      <p>Fill your details and export your resume to PDF</p>
     </header>
 
     <div class="main-grid">
@@ -95,48 +95,6 @@ Research Intern | Org | Dec 2024 - Present | - Researched Y"></textarea>
           <button type="button" onclick="generatePDF()">Generate PDF</button>
         </div>
       </section>
-
-      <!-- Preview Section -->
-      <aside id="resume-preview" class="preview-section">
-        <div class="resume resume-page">
-          <div class="left-col">
-            <h1 id="p-name"></h1>
-            <div class="contact">
-              <div id="p-email"></div>
-              <div id="p-phone"></div>
-              <div id="p-location"></div>
-            </div>
-            <div class="links">
-              <div id="p-linkedin"></div>
-              <div id="p-github"></div>
-              <div id="p-portfolio"></div>
-            </div>
-
-            <h2>Skills</h2>
-            <ul id="p-skills"></ul>
-
-            <h2>Certifications</h2>
-            <ul id="p-certs"></ul>
-
-            <h2>Languages</h2>
-            <ul id="p-langs"></ul>
-          </div>
-
-          <div class="right-col">
-            <h2>Summary</h2>
-            <p id="p-summary"></p>
-
-            <h2>Education</h2>
-            <div id="p-education"></div>
-
-            <h2>Experience</h2>
-            <div id="p-experience"></div>
-
-            <h2>Projects</h2>
-            <div id="p-projects"></div>
-          </div>
-        </div>
-      </aside>
     </div>
   </div>
 
