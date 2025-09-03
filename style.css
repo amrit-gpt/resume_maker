@@ -1,0 +1,94 @@
+/* Clean Resume Maker — styles */
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --text: #0b0d12;
+  --muted: #626874;
+  --border: #e6e8ec;
+  --accent: #2d6cdf;
+  --chip: #f1f3f8;
+}
+
+:root.dark {
+  --bg: #0b0d12;
+  --panel: #11141a;
+  --text: #eef2ff;
+  --muted: #a3acc2;
+  --border: #202635;
+  --accent: #82a7ff;
+  --chip: #1a2130;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.app-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 12px;
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+}
+.app-header h1 { font-size: 18px; margin: 0; }
+.app-header .actions { margin-left: auto; display: flex; gap: 8px; }
+button {
+  appearance: none; border: 1px solid var(--border); background: var(--panel);
+  color: var(--text); padding: 8px 12px; border-radius: 999px; cursor: pointer;
+}
+button.secondary { background: var(--chip); }
+button:hover { border-color: var(--accent); }
+
+.container {
+  max-width: 1200px; margin: 24px auto; padding: 0 16px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+@media (max-width: 1000px) { .container { grid-template-columns: 1fr; } }
+
+.editor, .preview > article {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02), 0 6px 24px rgba(10,22,70,0.05);
+}
+
+fieldset { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+legend { padding: 0 8px; color: var(--muted); }
+label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+input, textarea, select {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--panel); color: var(--text);
+}
+input:focus, textarea:focus, select:focus { outline: 2px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.grid { display: grid; gap: 12px; }
+.grid.two { grid-template-columns: 1fr 1fr; }
+@media (max-width: 640px) { .grid.two { grid-template-columns: 1fr; } }
+.help { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+/* Resume layout */
+.preview { }
+#resume { padding: 28px; }
+#resume h2 { margin: 0; font-size: 26px; }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.r-section { margin-top: 22px; }
+.r-title { text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+.item { margin-bottom: 12px; }
+.row-between { display: flex; justify-content: space-between; gap: 12px; }
+.small { color: var(--muted); font-size: 13px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--chip); border: 1px solid var(--border); padding: 3px 8px; border-radius: 999px; font-size: 12px; }
+
+/* Print */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #ffffff; }
+  #resume { box-shadow: none; padding: 0; }
+  .preview > article { border: none; }
+}

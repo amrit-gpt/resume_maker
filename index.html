@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clean Resume Maker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header no-print">
+      <h1>Clean Resume Maker</h1>
+      <div class="actions">
+        <button id="themeToggle" aria-label="Toggle theme">Dark mode</button>
+        <button id="downloadPdf" aria-label="Download PDF">Download PDF</button>
+        <button id="clearAll" aria-label="Clear all">Clear</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="editor no-print" aria-label="Resume editor">
+        <form id="resumeForm">
+          <fieldset>
+            <legend>Basics</legend>
+            <div class="grid two">
+              <label>Full name
+                <input type="text" name="name" autocomplete="name" />
+              </label>
+              <label>Email
+                <input type="email" name="email" autocomplete="email" />
+              </label>
+            </div>
+            <div class="grid two">
+              <label>Phone
+                <input type="tel" name="phone" autocomplete="tel" />
+              </label>
+              <label>Location
+                <input type="text" name="location" autocomplete="address-level2" />
+              </label>
+            </div>
+            <label>Summary
+              <textarea name="summary" rows="4" placeholder=""></textarea>
+            </label>
+            <div class="grid two">
+              <label>Website label
+                <input type="text" name="link_label_0" placeholder="" />
+              </label>
+              <label>Website URL
+                <input type="url" name="link_url_0" placeholder="" />
+              </label>
+            </div>
+            <div class="help">Add more links in the Links section below.</div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Education</legend>
+            <div id="educationList"></div>
+            <button type="button" class="secondary" data-add="education">+ Add education</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Experience</legend>
+            <div id="experienceList"></div>
+            <button type="button" class="secondary" data-add="experience">+ Add experience</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Projects</legend>
+            <div id="projectsList"></div>
+            <button type="button" class="secondary" data-add="projects">+ Add project</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Skills</legend>
+            <label>Skills (comma-separated)
+              <input type="text" name="skillsCsv" placeholder="" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Languages</legend>
+            <div id="languagesList"></div>
+            <button type="button" class="secondary" data-add="languages">+ Add language</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Certifications</legend>
+            <div id="certsList"></div>
+            <button type="button" class="secondary" data-add="certifications">+ Add certification</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Activities</legend>
+            <div id="activitiesList"></div>
+            <button type="button" class="secondary" data-add="activities">+ Add activity</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>Links</legend>
+            <div id="linksList"></div>
+            <button type="button" class="secondary" data-add="links">+ Add link</button>
+          </fieldset>
+        </form>
+      </section>
+
+      <section class="preview" aria-label="Resume preview">
+        <article id="resume" role="document" aria-label="Generated resume">
+          <!-- Header -->
+          <header id="r-header"></header>
+
+          <!-- Summary -->
+          <section id="r-summary" class="r-section"></section>
+
+          <!-- Experience -->
+          <section id="r-experience" class="r-section"></section>
+
+          <!-- Projects -->
+          <section id="r-projects" class="r-section"></section>
+
+          <!-- Education -->
+          <section id="r-education" class="r-section"></section>
+
+          <!-- Skills -->
+          <section id="r-skills" class="r-section"></section>
+
+          <!-- Languages -->
+          <section id="r-languages" class="r-section"></section>
+
+          <!-- Certifications -->
+          <section id="r-certifications" class="r-section"></section>
+
+          <!-- Activities -->
+          <section id="r-activities" class="r-section"></section>
+        </article>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
