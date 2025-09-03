@@ -32,6 +32,21 @@
         <label>Projects:</label>
         <textarea id="projects"></textarea>
 
+        <label>Summary:</label>
+        <textarea id="summary"></textarea>
+
+        <label>Certifications:</label>
+        <textarea id="certifications"></textarea>
+
+        <label>Skills:</label>
+        <input type="text" id="skills" placeholder="Comma separated skills">
+
+        <label>Languages:</label>
+        <input type="text" id="languages" placeholder="Comma separated languages">
+
+        <label>Links:</label>
+        <input type="text" id="links" placeholder="Comma separated links">
+
         <button type="button" onclick="saveData()">Save</button>
         <button type="button" onclick="loadData()">Load</button>
         <button type="button" onclick="generatePDF()">Generate PDF</button>
@@ -55,17 +70,41 @@
     <!-- Hidden resume template for PDF export -->
     <div id="resume-template" style="display:none;">
       <div class="resume-page">
-        <h1 id="r-name">Your Name</h1>
-        <p id="r-contact">your@email.com | +91-0000000000</p>
+        <!-- Name and Contact -->
+        <h1 id="r-name">Your Name</h1> <!-- candidate full name -->
+        <p id="r-contact">email | phone | location</p> <!-- contact info -->
 
-        <h2>Education</h2>
-        <p id="r-edu"></p>
+        <!-- Summary Section -->
+        <h2>Summary</h2> <!-- section heading -->
+        <p id="r-summary">Short professional summary here</p> <!-- summary text -->
 
-        <h2>Work Experience</h2>
-        <p id="r-work"></p>
+        <!-- Education Section -->
+        <h2>Education</h2> <!-- section heading -->
+        <ul id="r-edu"></ul> <!-- education list -->
 
-        <h2>Projects</h2>
-        <p id="r-projects"></p>
+        <!-- Experience Section -->
+        <h2>Experience</h2> <!-- section heading -->
+        <ul id="r-exp"></ul> <!-- experience list -->
+
+        <!-- Projects Section -->
+        <h2>Projects</h2> <!-- section heading -->
+        <ul id="r-projects"></ul> <!-- projects list -->
+
+        <!-- Certifications Section -->
+        <h2>Certifications</h2> <!-- section heading -->
+        <ul id="r-certs"></ul> <!-- certifications list -->
+
+        <!-- Skills Section -->
+        <h2>Skills</h2> <!-- section heading -->
+        <p id="r-skills"></p> <!-- skills line -->
+
+        <!-- Languages Section -->
+        <h2>Languages</h2> <!-- section heading -->
+        <p id="r-langs"></p> <!-- languages list -->
+
+        <!-- Links Section -->
+        <h2>Links</h2> <!-- section heading -->
+        <p id="r-links"></p> <!-- external links -->
       </div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
