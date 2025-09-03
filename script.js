@@ -1,52 +1,54 @@
-// Save data in browser
-function saveData() {
-  localStorage.setItem("name", document.getElementById("name").value);
-  localStorage.setItem("email", document.getElementById("email").value);
-  localStorage.setItem("phone", document.getElementById("phone").value);
-  localStorage.setItem("education", document.getElementById("education").value);
-  localStorage.setItem("experience", document.getElementById("experience").value);
-  localStorage.setItem("projects", document.getElementById("projects").value);
-  alert("Data Saved!");
+// Update preview live
+function updatePreview() {
+  document.getElementById("prev-name").innerText = document.getElementById("name").value || "Your Name";
+  document.getElementById("prev-email").innerText = document.getElementById("email").value || "your@email.com";
+  document.getElementById("prev-phone").innerText = document.getElementById("phone").value || "+91-0000000000";
+  document.getElementById("prev-edu").innerText = document.getElementById("education").value;
+  document.getElementById("prev-work").innerText = document.getElementById("work").value;
+  document.getElementById("prev-projects").innerText = document.getElementById("projects").value;
 }
 
-// Load data back into form
+// Attach live update
+document.querySelectorAll("input, textarea").forEach(el => {
+  el.addEventListener("input", updatePreview);
+});
+
+// Theme toggle
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
+
+// Save form data to localStorage
+function saveData() {
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    education: document.getElementById("education").value,
+    work: document.getElementById("work").value,
+    projects: document.getElementById("projects").value,
+  };
+  localStorage.setItem("resumeData", JSON.stringify(data));
+  alert("Data saved!");
+}
+
+// Load form data from localStorage
 function loadData() {
-  document.getElementById("name").value = localStorage.getItem("name") || "";
-  document.getElementById("email").value = localStorage.getItem("email") || "";
-  document.getElementById("phone").value = localStorage.getItem("phone") || "";
-  document.getElementById("education").value = localStorage.getItem("education") || "";
-  document.getElementById("experience").value = localStorage.getItem("experience") || "";
-  document.getElementById("projects").value = localStorage.getItem("projects") || "";
-  alert("Data Loaded!");
+  const data = JSON.parse(localStorage.getItem("resumeData"));
+  if (data) {
+    document.getElementById("name").value = data.name;
+    document.getElementById("email").value = data.email;
+    document.getElementById("phone").value = data.phone;
+    document.getElementById("education").value = data.education;
+    document.getElementById("work").value = data.work;
+    document.getElementById("projects").value = data.projects;
+    updatePreview();
+  } else {
+    alert("No saved data found.");
+  }
 }
 
 // Generate PDF
 function generatePDF() {
-  const { jsPDF } = window.jspdf;
-  let doc = new jsPDF();
-
-  let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let phone = document.getElementById("phone").value;
-  let education = document.getElementById("education").value;
-  let experience = document.getElementById("experience").value;
-  let projects = document.getElementById("projects").value;
-
-  doc.setFontSize(18);
-  doc.text(name, 20, 20);
-
-  doc.setFontSize(12);
-  doc.text("Email: " + email, 20, 30);
-  doc.text("Phone: " + phone, 20, 40);
-
-  doc.text("Education:", 20, 60);
-  doc.text(education, 20, 70);
-
-  doc.text("Experience:", 20, 90);
-  doc.text(experience, 20, 100);
-
-  doc.text("Projects:", 20, 120);
-  doc.text(projects, 20, 130);
-
-  doc.save("resume.pdf");
+  window.print(); // Simple way (prints resume preview)
 }
