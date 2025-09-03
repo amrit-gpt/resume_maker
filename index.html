@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dark Resume Maker — Tech Resume</title>
+  <title> 2 MIN Resume Maker </title>
 
   <!-- Google font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -11,17 +11,15 @@
   <!-- stylesheet -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- html2pdf (for PDF download) -->
+  <!-- html2pdf -->
   <script src="https://unpkg.com/html2pdf.js@0.9.3/dist/html2pdf.bundle.min.js"></script>
 </head>
 <body>
   <div class="app">
     <header class="app-header">
-      <h1>Dark Resume Maker</h1>
+      <h1>Resume Maker</h1>
       <div class="header-actions">
         <button id="downloadBtn">Download PDF</button>
-        <button id="copyBtn">Copy Text</button>
-        <button id="clearBtn" class="danger">Clear</button>
       </div>
     </header>
 
@@ -30,22 +28,22 @@
       <section class="panel form-panel">
         <form id="resumeForm" autocomplete="off">
           <div class="field-row">
-            <input id="name" name="name" placeholder="Full name" />
-            <input id="title" name="title" placeholder="Role / Title (e.g. Software Engineer)" />
+            <input id="name" placeholder="Full name" />
+            <input id="title" placeholder="Role / Title" />
           </div>
 
           <div class="field-row">
-            <input id="email" name="email" placeholder="Email (e.g. you@domain.com)" />
-            <input id="phone" name="phone" placeholder="Phone (e.g. +91 98XXXXXXXX)" />
+            <input id="email" placeholder="Email" />
+            <input id="phone" placeholder="Phone" />
           </div>
 
           <div class="field-row">
-            <input id="location" name="location" placeholder="Location (City, Country)" />
-            <input id="website" name="website" placeholder="Portfolio / GitHub / LinkedIn" />
+            <input id="location" placeholder="Location" />
+            <input id="website" placeholder="Portfolio / GitHub / LinkedIn" />
           </div>
 
           <label class="label">Summary</label>
-          <textarea id="summary" name="summary" placeholder="Short 2–3 line technical summary (what you build, main stacks, impact)"></textarea>
+          <textarea id="summary" placeholder="Short 2–3 line technical summary"></textarea>
 
           <hr />
 
@@ -74,10 +72,10 @@
           <hr />
 
           <label class="label">Skills (comma separated)</label>
-          <input id="skills" name="skills" placeholder="Python, React, PostgreSQL, Docker" />
+          <input id="skills" placeholder="Python, React, Docker" />
 
           <label class="label">Links (one per line)</label>
-          <textarea id="links" placeholder="https://github.com/username&#10;https://linkedin.com/in/username"></textarea>
+          <textarea id="links" placeholder="https://github.com/username"></textarea>
         </form>
       </section>
 
@@ -132,7 +130,7 @@
     </main>
 
     <footer class="app-footer">
-      <small>Minimal • Dark • Tech-focused — Built for clarity</small>
+      <small>Minimal • Dark • AMRITANSHU ADITYA @ 2025</small>
     </footer>
   </div>
 
