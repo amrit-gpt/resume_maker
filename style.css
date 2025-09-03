@@ -1,75 +1,100 @@
-/* Default light theme */
+/* General Layout */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: #f4f4f4;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #f9fafb;
+  color: #111;
 }
 
-h1 {
+.app {
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form Section */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.form-card h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.form-card input,
+.form-card textarea {
+  width: 100%;
+  margin: 5px 0 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Resume Preview */
+.preview-section {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+}
+
+.resume {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 20px;
+}
+
+.left-col {
+  background: #f3f4f6;
+  padding: 15px;
+}
+
+.left-col h1 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.left-col h2 {
+  font-size: 16px;
+  margin-top: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.right-col {
+  padding: 15px;
+}
+
+.right-col h2 {
+  font-size: 16px;
+  margin-top: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.right-col div {
   margin-bottom: 10px;
 }
 
-.wrapper {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.container {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  width: 350px;
-}
-
-label {
-  display: block;
-  margin-top: 12px;
-  font-weight: bold;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  margin: 10px 5px 0 0;
-  cursor: pointer;
-  transition: 0.3s;
-}
-button:hover {
-  background: #0056b3;
-}
-
-/* Dark theme */
-body.dark {
-  background: #121212;
-  color: #eee;
-}
-body.dark .container {
-  background: #1e1e1e;
-  color: #eee;
-  box-shadow: 0 6px 16px rgba(255,255,255,0.05);
-}
-body.dark button {
-  background: #ff6b6b;
-}
-body.dark button:hover {
-  background: #ff4757;
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
 }

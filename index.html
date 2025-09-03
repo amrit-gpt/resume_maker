@@ -4,110 +4,142 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resume Builder</title>
+  <meta name="description" content="Build and customize your professional resume with live preview and PDF export">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-  <h1>Resume Builder</h1>
-  <button onclick="toggleTheme()">Change Theme</button>
+  <div class="app">
+    <header class="header">
+      <h1>Resume Builder</h1>
+      <p>Create your professional resume with live preview</p>
+    </header>
 
-  <div class="wrapper">
-    <!-- Form Section -->
-    <div id="form-container" class="container">
-      <form id="resume-form">
-        <label>Name:</label>
-        <input type="text" id="name" required>
+    <div class="main-grid">
+      <!-- Form Section -->
+      <section class="form-section">
+        <!-- Personal Info -->
+        <div class="form-card">
+          <h2>Personal Information</h2>
+          <label>Full Name</label>
+          <input type="text" id="name" placeholder="Full name">
 
-        <label>Email:</label>
-        <input type="email" id="email" required>
+          <div class="form-row">
+            <div>
+              <label>Email</label>
+              <input type="email" id="email" placeholder="email@example.com">
+            </div>
+            <div>
+              <label>Phone</label>
+              <input type="text" id="phone" placeholder="+91-XXXXXXXXXX">
+            </div>
+          </div>
 
-        <label>Phone:</label>
-        <input type="text" id="phone" required>
+          <label>Location</label>
+          <input type="text" id="location" placeholder="City, Country">
 
-        <label>Education:</label>
-        <textarea id="education"></textarea>
+          <label>LinkedIn URL</label>
+          <input type="text" id="linkedin" placeholder="https://linkedin.com/in/...">
 
-        <label>Work Experience:</label>
-        <textarea id="work"></textarea>
+          <label>GitHub URL</label>
+          <input type="text" id="github" placeholder="https://github.com/...">
 
-        <label>Projects:</label>
-        <textarea id="projects"></textarea>
+          <label>Portfolio URL</label>
+          <input type="text" id="portfolio" placeholder="https://...">
 
-        <label>Summary:</label>
-        <textarea id="summary"></textarea>
+          <label>Summary</label>
+          <textarea id="summary" placeholder="Short professional summary"></textarea>
+        </div>
 
-        <label>Certifications:</label>
-        <textarea id="certifications"></textarea>
+        <!-- Skills & Languages -->
+        <div class="form-card">
+          <h2>Skills & Languages</h2>
+          <label>Skills (comma separated)</label>
+          <input type="text" id="skills" placeholder="e.g. Python, C++, React">
 
-        <label>Skills:</label>
-        <input type="text" id="skills" placeholder="Comma separated skills">
+          <label>Languages (comma separated)</label>
+          <input type="text" id="languages" placeholder="e.g. English, Hindi">
+        </div>
 
-        <label>Languages:</label>
-        <input type="text" id="languages" placeholder="Comma separated languages">
+        <!-- Education -->
+        <div class="form-card">
+          <h2>Education</h2>
+          <small>One entry per line: <code>Degree | Institution | StartYear - EndYear</code></small>
+          <textarea id="education" placeholder="B.Tech | SRM Institute | 2022 - Present
+High School | ABC School | 2019 - 2021"></textarea>
+        </div>
 
-        <label>Links:</label>
-        <input type="text" id="links" placeholder="Comma separated links">
+        <!-- Work Experience -->
+        <div class="form-card">
+          <h2>Work Experience</h2>
+          <small>One entry per line: <code>Role | Company | StartYear - EndYear | - bullet points start with '-'</code></small>
+          <textarea id="experience" placeholder="Web Dev Intern | Company | Jul 2024 - Aug 2024 | - Built feature X
+Research Intern | Org | Dec 2024 - Present | - Researched Y"></textarea>
+        </div>
 
-        <button type="button" onclick="saveData()">Save</button>
-        <button type="button" onclick="loadData()">Load</button>
-        <button type="button" onclick="generatePDF()">Generate PDF</button>
-      </form>
-    </div>
+        <!-- Projects -->
+        <div class="form-card">
+          <h2>Projects</h2>
+          <small>One entry per line: <code>Title | StartYear - EndYear | Short description</code></small>
+          <textarea id="projects" placeholder="Project A | 2023 - 2024 | Built ..."></textarea>
+        </div>
 
-    <!-- Preview Section -->
-    <div id="resume-preview" class="container">
-      <h2 id="prev-name">Your Name</h2>
-      <p id="prev-email">your@email.com</p>
-      <p id="prev-phone">+91-0000000000</p>
-      <h3>Education</h3>
-      <p id="prev-edu"></p>
-      <h3>Work Experience</h3>
-      <p id="prev-work"></p>
-      <h3>Projects</h3>
-      <p id="prev-projects"></p>
+        <!-- Certifications -->
+        <div class="form-card">
+          <h2>Certifications</h2>
+          <small>One entry per line: <code>Title | Authority | Year</code></small>
+          <textarea id="certifications" placeholder="Programming in Java | NPTEL | 2023"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" onclick="generatePDF()">Generate PDF</button>
+        </div>
+      </section>
+
+      <!-- Preview Section -->
+      <aside id="resume-preview" class="preview-section">
+        <div class="resume resume-page">
+          <div class="left-col">
+            <h1 id="p-name"></h1>
+            <div class="contact">
+              <div id="p-email"></div>
+              <div id="p-phone"></div>
+              <div id="p-location"></div>
+            </div>
+            <div class="links">
+              <div id="p-linkedin"></div>
+              <div id="p-github"></div>
+              <div id="p-portfolio"></div>
+            </div>
+
+            <h2>Skills</h2>
+            <ul id="p-skills"></ul>
+
+            <h2>Certifications</h2>
+            <ul id="p-certs"></ul>
+
+            <h2>Languages</h2>
+            <ul id="p-langs"></ul>
+          </div>
+
+          <div class="right-col">
+            <h2>Summary</h2>
+            <p id="p-summary"></p>
+
+            <h2>Education</h2>
+            <div id="p-education"></div>
+
+            <h2>Experience</h2>
+            <div id="p-experience"></div>
+
+            <h2>Projects</h2>
+            <div id="p-projects"></div>
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
 
-    <!-- Hidden resume template for PDF export -->
-    <div id="resume-template" style="display:none;">
-      <div class="resume-page">
-        <!-- Name and Contact -->
-        <h1 id="r-name">Your Name</h1> <!-- candidate full name -->
-        <p id="r-contact">email | phone | location</p> <!-- contact info -->
-
-        <!-- Summary Section -->
-        <h2>Summary</h2> <!-- section heading -->
-        <p id="r-summary">Short professional summary here</p> <!-- summary text -->
-
-        <!-- Education Section -->
-        <h2>Education</h2> <!-- section heading -->
-        <ul id="r-edu"></ul> <!-- education list -->
-
-        <!-- Experience Section -->
-        <h2>Experience</h2> <!-- section heading -->
-        <ul id="r-exp"></ul> <!-- experience list -->
-
-        <!-- Projects Section -->
-        <h2>Projects</h2> <!-- section heading -->
-        <ul id="r-projects"></ul> <!-- projects list -->
-
-        <!-- Certifications Section -->
-        <h2>Certifications</h2> <!-- section heading -->
-        <ul id="r-certs"></ul> <!-- certifications list -->
-
-        <!-- Skills Section -->
-        <h2>Skills</h2> <!-- section heading -->
-        <p id="r-skills"></p> <!-- skills line -->
-
-        <!-- Languages Section -->
-        <h2>Languages</h2> <!-- section heading -->
-        <p id="r-langs"></p> <!-- languages list -->
-
-        <!-- Links Section -->
-        <h2>Links</h2> <!-- section heading -->
-        <p id="r-links"></p> <!-- external links -->
-      </div>
-    </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
