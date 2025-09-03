@@ -1,103 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume Builder</title>
-  <meta name="description" content="Build and export your professional resume to PDF">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="app">
-    <header class="header">
-      <h1>Resume Builder</h1>
-      <p>Fill your details and export your resume to PDF</p>
-    </header>
 
-    <div class="main-grid">
-      <!-- Form Section -->
-      <section class="form-section">
-        <!-- Personal Info -->
-        <div class="form-card">
-          <h2>Personal Information</h2>
-          <label>Full Name</label>
-          <input type="text" id="name" placeholder="Full name">
+    <div class="container">
+        <h1>Resume Builder</h1>
+        <form id="resume-form">
 
-          <div class="form-row">
-            <div>
-              <label>Email</label>
-              <input type="email" id="email" placeholder="email@example.com">
+            <div class="card">
+                <h2>Personal Information</h2>
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="tel" id="phone" placeholder="Phone">
+                <input type="text" id="location" placeholder="City, Country">
+                <input type="url" id="linkedin" placeholder="LinkedIn URL">
+                <input type="url" id="github" placeholder="GitHub URL">
+                <input type="url" id="portfolio" placeholder="Portfolio URL">
             </div>
-            <div>
-              <label>Phone</label>
-              <input type="text" id="phone" placeholder="+91-XXXXXXXXXX">
+
+            <div class="card">
+                <h2>Summary</h2>
+                <textarea id="summary" rows="4" placeholder="A short professional summary"></textarea>
             </div>
-          </div>
 
-          <label>Location</label>
-          <input type="text" id="location" placeholder="City, Country">
+            <div class="card">
+                <h2>Skills</h2>
+                <textarea id="skills" rows="2" placeholder="Comma-separated list (e.g., HTML, CSS, JavaScript)"></textarea>
+            </div>
 
-          <label>LinkedIn URL</label>
-          <input type="text" id="linkedin" placeholder="https://linkedin.com/in/...">
+            <div class="card">
+                <h2>Languages</h2>
+                <textarea id="languages" rows="2" placeholder="Comma-separated list (e.g., English, Hindi)"></textarea>
+            </div>
 
-          <label>GitHub URL</label>
-          <input type="text" id="github" placeholder="https://github.com/...">
+            <div class="card">
+                <h2>Education</h2>
+                <textarea id="education" rows="5" placeholder="Degree | Institution | StartYear - EndYear"></textarea>
+            </div>
 
-          <label>Portfolio URL</label>
-          <input type="text" id="portfolio" placeholder="https://...">
+            <div class="card">
+                <h2>Work Experience</h2>
+                <textarea id="work-experience" rows="8" placeholder="Role | Company | StartYear - EndYear&#10;- Bullet point 1&#10;- Bullet point 2"></textarea>
+            </div>
 
-          <label>Summary</label>
-          <textarea id="summary" placeholder="Short professional summary"></textarea>
-        </div>
+            <div class="card">
+                <h2>Projects</h2>
+                <textarea id="projects" rows="6" placeholder="Title | StartYear - EndYear | Short description"></textarea>
+            </div>
 
-        <!-- Skills & Languages -->
-        <div class="form-card">
-          <h2>Skills & Languages</h2>
-          <label>Skills (comma separated)</label>
-          <input type="text" id="skills" placeholder="e.g. Python, C++, React">
+            <div class="card">
+                <h2>Certifications</h2>
+                <textarea id="certifications" rows="5" placeholder="Title | Authority | Year"></textarea>
+            </div>
 
-          <label>Languages (comma separated)</label>
-          <input type="text" id="languages" placeholder="e.g. English, Hindi">
-        </div>
-
-        <!-- Education -->
-        <div class="form-card">
-          <h2>Education</h2>
-          <small>One entry per line: <code>Degree | Institution | StartYear - EndYear</code></small>
-          <textarea id="education" placeholder="B.Tech | SRM Institute | 2022 - Present
-High School | ABC School | 2019 - 2021"></textarea>
-        </div>
-
-        <!-- Work Experience -->
-        <div class="form-card">
-          <h2>Work Experience</h2>
-          <small>One entry per line: <code>Role | Company | StartYear - EndYear | - bullet points start with '-'</code></small>
-          <textarea id="experience" placeholder="Web Dev Intern | Company | Jul 2024 - Aug 2024 | - Built feature X
-Research Intern | Org | Dec 2024 - Present | - Researched Y"></textarea>
-        </div>
-
-        <!-- Projects -->
-        <div class="form-card">
-          <h2>Projects</h2>
-          <small>One entry per line: <code>Title | StartYear - EndYear | Short description</code></small>
-          <textarea id="projects" placeholder="Project A | 2023 - 2024 | Built ..."></textarea>
-        </div>
-
-        <!-- Certifications -->
-        <div class="form-card">
-          <h2>Certifications</h2>
-          <small>One entry per line: <code>Title | Authority | Year</code></small>
-          <textarea id="certifications" placeholder="Programming in Java | NPTEL | 2023"></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button type="button" onclick="generatePDF()">Generate PDF</button>
-        </div>
-      </section>
+            <button type="button" id="generate-pdf-btn">Generate PDF</button>
+        </form>
     </div>
-  </div>
-<div id="pdf-content" style="display: none;"></div>
-  <script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>

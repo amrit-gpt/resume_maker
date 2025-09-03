@@ -1,143 +1,150 @@
-/* Resume Builder Styles - Form Only & PDF Ready */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f1f5f9;
-    color: #1e293b;
+    background-color: #f0f2f5;
+    color: #333;
     line-height: 1.6;
-}
-
-.app {
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    background: #f1f5f9;
 }
 
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+    max-width: 800px;
+    width: 100%;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.header {
+h1 {
     text-align: center;
-    margin-bottom: 2rem;
+    color: #444;
+    margin-bottom: 30px;
 }
 
-.header h1 {
-    font-size: 2.75rem;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 0.5rem;
+.card {
+    background: #fdfdfd;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
 }
 
-.header p {
-    color: #475569;
-    font-size: 1.15rem;
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.main-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-}
-
-/* Form Section */
-.form-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-card {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border: 1px solid #cbd5e1;
-    transition: transform 0.2s ease;
-}
-
-.form-card:hover {
-    transform: translateY(-3px);
-}
-
-.form-card h2 {
+.card h2 {
     font-size: 1.5rem;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 1rem;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.form-group {
-    margin-bottom: 1rem;
+    color: #555;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
 }
 
 input[type="text"],
 input[type="email"],
+input[type="tel"],
+input[type="url"],
 textarea {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #94a3b8;
-    border-radius: 0.5rem;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
     font-size: 1rem;
-    color: #1e293b;
-    background-color: #f8fafc;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
+input:focus,
 textarea:focus {
     outline: none;
-    border-color: #0ea5e9;
-    box-shadow: 0 0 0 2px rgba(14,165,233,0.2);
+    border-color: #6a1b9a;
 }
 
 textarea {
-    min-height: 80px;
     resize: vertical;
 }
 
-.form-actions {
-    text-align: center;
-    margin-top: 1rem;
-}
-
 button {
-    background-color: #0ea5e9;
-    color: white;
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #6a1b9a;
+    color: #fff;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
+    border-radius: 5px;
     font-size: 1.1rem;
-    font-weight: 600;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #0284c7;
+    background-color: #4a148c;
     transform: translateY(-2px);
 }
 
-/* Print Styles: hide form section, generate PDF from JS */
-@media print {
-    body, .app {
-        margin: 0;
-        background: white;
-    }
-    .form-section {
-        display: none !important;
-    }
+button:active {
+    transform: translateY(0);
+}
+
+/* PDF Content Styling (Hidden) */
+#pdf-content {
+    display: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    padding: 10mm;
+    margin: 0 auto;
+    width: 210mm; /* A4 width */
+    height: 297mm; /* A4 height */
+    box-sizing: border-box;
+    background-color: white;
+}
+
+#pdf-content h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+#pdf-content .section-item {
+    margin-bottom: 12px;
+}
+
+#pdf-content .section-item .title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+#pdf-content .section-item .subtitle {
+    font-style: italic;
+    color: #666;
+    margin-left: 5px;
+}
+
+#pdf-content .section-item .period {
+    float: right;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+#pdf-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 5px 0 0;
+}
+
+#pdf-content li {
+    margin-bottom: 5px;
 }
