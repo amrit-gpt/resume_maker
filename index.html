@@ -1,95 +1,141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume Template Maker</title>
-  <link rel="stylesheet" href="index.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dark Resume Maker — Tech Resume</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- html2pdf (for PDF download) -->
+  <script src="https://unpkg.com/html2pdf.js@0.9.3/dist/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <h1>Resume Template Maker</h1>
-    <p>Create a professional resume in minutes!</p>
-  </header>
-
-  <div class="container">
-    <!-- Resume Preview -->
-    <div class="side">
-      <iframe src="template.html"></iframe>
-    </div>
-
-    <!-- Resume Form -->
-    <div id="resume-form" class="side">
-      <h1>Personal Information</h1>
-      <div class="profile-image-upload">
-        <label for="profile-image">Upload Profile Image</label>
-        <input id="profile-image" type="file" accept="image/*">
-        <button id="clear-image-button">Clear</button>
-        <div id="image-preview" style="display:none;">
-          <h2>Image Preview:</h2>
-          <img id="preview" src="" alt="Profile Image Preview">
-        </div>
+  <div class="app">
+    <header class="app-header">
+      <h1>Dark Resume Maker</h1>
+      <div class="header-actions">
+        <button id="downloadBtn">Download PDF</button>
+        <button id="copyBtn">Copy Text</button>
+        <button id="clearBtn" class="danger">Clear</button>
       </div>
+    </header>
 
-      <label for="name">Name <span class="required">*</span></label>
-      <input id="name" type="text" placeholder="Name" required>
+    <main class="container">
+      <!-- Form column -->
+      <section class="panel form-panel">
+        <form id="resumeForm" autocomplete="off">
+          <div class="field-row">
+            <input id="name" name="name" placeholder="Full name" />
+            <input id="title" name="title" placeholder="Role / Title (e.g. Software Engineer)" />
+          </div>
 
-      <label for="email">Email <span class="required">*</span></label>
-      <input id="email" type="email" placeholder="Email" required>
+          <div class="field-row">
+            <input id="email" name="email" placeholder="Email (e.g. you@domain.com)" />
+            <input id="phone" name="phone" placeholder="Phone (e.g. +91 98XXXXXXXX)" />
+          </div>
 
-      <label for="phone">Phone <span class="required">*</span></label>
-      <input id="phone" type="text" placeholder="Phone" required>
+          <div class="field-row">
+            <input id="location" name="location" placeholder="Location (City, Country)" />
+            <input id="website" name="website" placeholder="Portfolio / GitHub / LinkedIn" />
+          </div>
 
-      <label for="address">Address <span class="required">*</span></label>
-      <input id="address" type="text" placeholder="Address" required>
+          <label class="label">Summary</label>
+          <textarea id="summary" name="summary" placeholder="Short 2–3 line technical summary (what you build, main stacks, impact)"></textarea>
 
-      <h1>Summary</h1>
-      <textarea id="summary" placeholder="Summary" required></textarea>
+          <hr />
 
-      <h1>Education</h1>
-      <input id="school" type="text" placeholder="School" required>
-      <input id="degree" type="text" placeholder="Degree" required>
-      <input id="major" type="text" placeholder="Major" required>
-      <input id="graduation-date" type="text" placeholder="Graduation Date (MM/YYYY)" required>
+          <div class="section-header">
+            <h3>Education</h3>
+            <button type="button" id="addEdu">+ Add</button>
+          </div>
+          <div id="educationList" class="repeat-list"></div>
 
-      <h1>Work Experience</h1>
-      <input id="company" type="text" placeholder="Company" required>
-      <input id="title" type="text" placeholder="Title" required>
-      <input id="start-date" type="text" placeholder="Start Date (MM/YYYY)" required>
-      <input id="end-date" type="text" placeholder="End Date (MM/YYYY)" required>
+          <hr />
 
-      <h1>Skills</h1>
-      <input id="skill-1" type="text" placeholder="Skill 1" required>
-      <input id="skill-2" type="text" placeholder="Skill 2" required>
-      <input id="skill-3" type="text" placeholder="Skill 3">
+          <div class="section-header">
+            <h3>Experience</h3>
+            <button type="button" id="addExp">+ Add</button>
+          </div>
+          <div id="experienceList" class="repeat-list"></div>
 
-      <h1>References</h1>
-      <input id="reference-1" type="text" placeholder="Reference 1" required>
-      <input id="reference-2" type="text" placeholder="Reference 2">
-      <input id="reference-3" type="text" placeholder="Reference 3">
+          <hr />
 
-      <p><strong>Note:</strong> Fields marked with <span class="required">*</span> are required.</p>
+          <div class="section-header">
+            <h3>Projects</h3>
+            <button type="button" id="addProj">+ Add</button>
+          </div>
+          <div id="projectsList" class="repeat-list"></div>
 
-      <div class="download">
-        <button id="download-pdf">Download PDF</button>
-        <button id="download-docx">Download DOCX</button>
-        <button id="download-html">Download HTML</button>
-      </div>
-    </div>
+          <hr />
+
+          <label class="label">Skills (comma separated)</label>
+          <input id="skills" name="skills" placeholder="Python, React, PostgreSQL, Docker" />
+
+          <label class="label">Links (one per line)</label>
+          <textarea id="links" placeholder="https://github.com/username&#10;https://linkedin.com/in/username"></textarea>
+        </form>
+      </section>
+
+      <!-- Preview column -->
+      <section class="panel preview-panel" id="previewContainer">
+        <article id="resumePreview" class="resume">
+          <header class="resume-header">
+            <div>
+              <h2 id="pv-name"></h2>
+              <p id="pv-title" class="muted"></p>
+            </div>
+            <div class="contact">
+              <div id="pv-email" class="muted small"></div>
+              <div id="pv-phone" class="muted small"></div>
+              <div id="pv-location" class="muted small"></div>
+              <div id="pv-website" class="muted small"></div>
+            </div>
+          </header>
+
+          <section class="section">
+            <h4>Summary</h4>
+            <p id="pv-summary" class="section-text muted"></p>
+          </section>
+
+          <section class="section">
+            <h4>Experience</h4>
+            <div id="pv-experience"></div>
+          </section>
+
+          <section class="section">
+            <h4>Education</h4>
+            <div id="pv-education"></div>
+          </section>
+
+          <section class="section">
+            <h4>Projects</h4>
+            <div id="pv-projects"></div>
+          </section>
+
+          <section class="section two-col">
+            <div>
+              <h4>Skills</h4>
+              <p id="pv-skills"></p>
+            </div>
+            <div>
+              <h4>Links</h4>
+              <div id="pv-links" class="muted small"></div>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>Minimal • Dark • Tech-focused — Built for clarity</small>
+    </footer>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Resume Template Maker. Built with ❤️ for students and professionals.</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <script src="index.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
