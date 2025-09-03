@@ -8,11 +8,11 @@
 </head>
 <body>
   <h1>Resume Builder</h1>
-  <button onclick="toggleTheme()">Toggle Theme</button>
+  <button onclick="toggleTheme()">Change Theme</button>
 
   <div class="wrapper">
     <!-- Form Section -->
-    <div class="container">
+    <div id="form-container" class="container">
       <form id="resume-form">
         <label>Name:</label>
         <input type="text" id="name" required>
@@ -52,6 +52,23 @@
     </div>
   </div>
 
+    <!-- Hidden resume template for PDF export -->
+    <div id="resume-template" style="display:none;">
+      <div class="resume-page">
+        <h1 id="r-name">Your Name</h1>
+        <p id="r-contact">your@email.com | +91-0000000000</p>
+
+        <h2>Education</h2>
+        <p id="r-edu"></p>
+
+        <h2>Work Experience</h2>
+        <p id="r-work"></p>
+
+        <h2>Projects</h2>
+        <p id="r-projects"></p>
+      </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
