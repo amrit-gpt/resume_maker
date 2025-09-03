@@ -1,51 +1,66 @@
 const { jsPDF } = window.jspdf;
 
+// Section helpers
+function addSection(doc, title, items, y) {
+  if (!items || items.length === 0) return y;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text(title, 20, y);
+  y += 6;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  items.forEach(i => {
+    const split = doc.splitTextToSize(i, 170);
+    doc.text(split, 25, y);
+    y += split.length * 6 + 2;
+  });
+  y += 4;
+  return y;
+}
+
 document.getElementById("downloadBtn").addEventListener("click", () => {
-  const name = document.getElementById("name").value;
-  const title = document.getElementById("title").value;
-  const email = document.getElementById("email").value;
-  const phone = document.getElementById("phone").value;
-  const location = document.getElementById("location").value;
-  const summary = document.getElementById("About").value;
-  const education = document.getElementById("education").value;
-  const experience = document.getElementById("experience").value;
-  const projects = document.getElementById("projects").value;
-  const skills = document.getElementById("skills").value;
-  const links = document.getElementById("links").value;
+  const name = document.getElementById("name").value || "Your Name";
+  const title = document.getElementById("title").value || "";
+  const email = document.getElementById("email").value || "";
+  const phone = document.getElementById("phone").value || "";
+  const location = document.getElementById("location").value || "";
+  const about = document.getElementById("about").value || "";
+
+  const educations = [...document.querySelectorAll(".edu")].map(e => e.value).filter(v=>v);
+  const experiences = [...document.querySelectorAll(".exp")].map(e => e.value).filter(v=>v);
+  const projects = [...document.querySelectorAll(".proj")].map(e => e.value).filter(v=>v);
+
+  const skills = document.getElementById("skills").value || "";
+  const links = document.getElementById("links").value || "";
 
   const doc = new jsPDF();
+  let y = 20;
 
+  // Header
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
-  doc.text(name || "Your Name", 20, 20);
-  doc.setFontSize(12);
-  doc.text(title || "", 20, 30);
-
+  doc.text(name, 20, y);
+  y += 8;
   doc.setFont("helvetica", "normal");
-  doc.text(`Email: ${email}`, 20, 40);
-  doc.text(`Phone: ${phone}`, 20, 48);
-  doc.text(`Location: ${location}`, 20, 56);
+  doc.setFontSize(12);
+  doc.text(`${title}`, 20, y);
+  y += 10;
+  doc.text(`${email} | ${phone} | ${location}`, 20, y);
+  y += 14;
 
-  let y = 70;
-  function addSection(title, content) {
-    if (!content) return;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(title, 20, y);
-    y += 6;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    const split = doc.splitTextToSize(content, 170);
-    doc.text(split, 20, y);
-    y += split.length * 6 + 6;
-  }
+  // Sections in order
+  y = addSection(doc, "Summary", [about], y);
+  y = addSection(doc, "Education", educations, y);
+  y = addSection(doc, "Experience", experiences, y);
+  y = addSection(doc, "Projects", projects, y);
 
-  addSection("About", summary);
-  addSection("Education", education);
-  addSection("Experience", experience);
-  addSection("Projects", projects);
-  addSection("Skills", skills);
-  addSection("Links", links);
+  if (skills) y = addSection(doc, "Skills", [skills], y);
+  if (links) y = addSection(doc, "Links", [links], y);
+
+  // Footer
+  doc.setFontSize(10);
+  doc.setTextColor(120);
+  doc.text("AMRITANSHU ADITYA 2025", 105, 285, { align: "center" });
 
   doc.save((name || "resume") + ".pdf");
 });

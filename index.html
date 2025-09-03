@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Resume Maker</title>
+  <title>RESUME MAKER</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
@@ -13,7 +13,7 @@
 <body>
   <div class="app">
     <header class="app-header">
-      <h1>Resume Maker</h1>
+      <h1>RESUME MAKER</h1>
       <button id="downloadBtn">Download PDF</button>
     </header>
 
@@ -25,23 +25,26 @@
         <input id="phone" placeholder="Phone" />
         <input id="location" placeholder="Location" />
 
-        <label>About</label>
-        <textarea id="About" placeholder="Brief professional summary"></textarea>
-
         <label>Education</label>
-        <textarea id="education" placeholder="e.g. B.Tech CSE, SRM University, 2022-2026"></textarea>
+        <div id="educationList"></div>
+        <button type="button" class="add-btn" id="addEdu">+ Add Education</button>
 
         <label>Experience</label>
-        <textarea id="experience" placeholder="e.g. Web Dev Intern, Company, 2024"></textarea>
+        <div id="experienceList"></div>
+        <button type="button" class="add-btn" id="addExp">+ Add Experience</button>
 
         <label>Projects</label>
-        <textarea id="projects" placeholder="e.g. Portfolio Website using React"></textarea>
+        <div id="projectsList"></div>
+        <button type="button" class="add-btn" id="addProj">+ Add Project</button>
 
         <label>Skills</label>
         <input id="skills" placeholder="Python, React, Docker" />
 
         <label>Links</label>
         <textarea id="links" placeholder="https://github.com/username"></textarea>
+
+        <label>About</label>
+        <textarea id="about" placeholder="Write about yourself (2–3 lines)"></textarea>
       </form>
     </main>
   </div>
