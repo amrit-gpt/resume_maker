@@ -1,139 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Clean Resume Maker</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header class="app-header no-print">
-      <h1>Clean Resume Maker</h1>
-      <div class="actions">
-        <button id="themeToggle" aria-label="Toggle theme">Dark mode</button>
-        <button id="downloadPdf" aria-label="Download PDF">Download PDF</button>
-        <button id="clearAll" aria-label="Clear all">Clear</button>
-      </div>
-    </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Polished Resume Maker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar no-print">
+    <div class="brand">
+      <strong>Resume</strong> Maker
+    </div>
+    <div class="controls">
+      <button id="themeToggle" class="btn ghost" aria-label="Toggle theme">Dark</button>
+      <button id="exportPdf" class="btn primary" aria-label="Download PDF">Download PDF</button>
+      <button id="resetBtn" class="btn ghost" aria-label="Clear all">Clear</button>
+    </div>
+  </header>
 
-    <main class="container">
-      <section class="editor no-print" aria-label="Resume editor">
-        <form id="resumeForm">
-          <fieldset>
-            <legend>Basics</legend>
-            <div class="grid two">
-              <label>Full name
-                <input type="text" name="name" autocomplete="name" />
-              </label>
-              <label>Email
-                <input type="email" name="email" autocomplete="email" />
-              </label>
-            </div>
-            <div class="grid two">
-              <label>Phone
-                <input type="tel" name="phone" autocomplete="tel" />
-              </label>
-              <label>Location
-                <input type="text" name="location" autocomplete="address-level2" />
-              </label>
-            </div>
-            <label>Summary
-              <textarea name="summary" rows="4" placeholder=""></textarea>
+  <main class="layout">
+    <!-- Editor -->
+    <section class="panel editor no-print" aria-label="Editor">
+      <form id="editorForm" autocomplete="off">
+        <div class="form-row split">
+          <div>
+            <label class="field">
+              <span class="label">Full name</span>
+              <input name="name" type="text" placeholder="" />
             </label>
-            <div class="grid two">
-              <label>Website label
-                <input type="text" name="link_label_0" placeholder="" />
-              </label>
-              <label>Website URL
-                <input type="url" name="link_url_0" placeholder="" />
-              </label>
-            </div>
-            <div class="help">Add more links in the Links section below.</div>
-          </fieldset>
-
-          <fieldset>
-            <legend>Education</legend>
-            <div id="educationList"></div>
-            <button type="button" class="secondary" data-add="education">+ Add education</button>
-          </fieldset>
-
-          <fieldset>
-            <legend>Experience</legend>
-            <div id="experienceList"></div>
-            <button type="button" class="secondary" data-add="experience">+ Add experience</button>
-          </fieldset>
-
-          <fieldset>
-            <legend>Projects</legend>
-            <div id="projectsList"></div>
-            <button type="button" class="secondary" data-add="projects">+ Add project</button>
-          </fieldset>
-
-          <fieldset>
-            <legend>Skills</legend>
-            <label>Skills (comma-separated)
-              <input type="text" name="skillsCsv" placeholder="" />
+            <label class="field">
+              <span class="label">Professional title</span>
+              <input name="title" type="text" placeholder="" />
             </label>
-          </fieldset>
+          </div>
+          <div>
+            <label class="field">
+              <span class="label">Email</span>
+              <input name="email" type="email" placeholder="" />
+            </label>
+            <label class="field">
+              <span class="label">Phone</span>
+              <input name="phone" type="tel" placeholder="" />
+            </label>
+          </div>
+        </div>
 
-          <fieldset>
-            <legend>Languages</legend>
-            <div id="languagesList"></div>
-            <button type="button" class="secondary" data-add="languages">+ Add language</button>
-          </fieldset>
+        <label class="field">
+          <span class="label">Location</span>
+          <input name="location" type="text" placeholder="" />
+        </label>
 
-          <fieldset>
-            <legend>Certifications</legend>
-            <div id="certsList"></div>
-            <button type="button" class="secondary" data-add="certifications">+ Add certification</button>
-          </fieldset>
+        <label class="field">
+          <span class="label">Summary</span>
+          <textarea name="summary" rows="4" placeholder=""></textarea>
+        </label>
 
-          <fieldset>
-            <legend>Activities</legend>
-            <div id="activitiesList"></div>
-            <button type="button" class="secondary" data-add="activities">+ Add activity</button>
-          </fieldset>
+        <fieldset class="group">
+          <legend>Skills</legend>
+          <label class="field inline">
+            <input name="skillInput" type="text" placeholder="Add skill and press Enter" />
+            <div class="hint">Enter skills one by one</div>
+          </label>
+          <div id="skillsTags" class="tags"></div>
+        </fieldset>
 
-          <fieldset>
-            <legend>Links</legend>
-            <div id="linksList"></div>
-            <button type="button" class="secondary" data-add="links">+ Add link</button>
-          </fieldset>
-        </form>
-      </section>
+        <fieldset class="group">
+          <legend>Experience</legend>
+          <div id="expList" class="list"></div>
+          <div class="row">
+            <button type="button" class="btn ghost" data-add="experience">+ Add experience</button>
+          </div>
+        </fieldset>
 
-      <section class="preview" aria-label="Resume preview">
-        <article id="resume" role="document" aria-label="Generated resume">
-          <!-- Header -->
-          <header id="r-header"></header>
+        <fieldset class="group">
+          <legend>Education</legend>
+          <div id="eduList" class="list"></div>
+          <div class="row">
+            <button type="button" class="btn ghost" data-add="education">+ Add education</button>
+          </div>
+        </fieldset>
 
-          <!-- Summary -->
-          <section id="r-summary" class="r-section"></section>
+        <fieldset class="group">
+          <legend>Projects</legend>
+          <div id="projList" class="list"></div>
+          <div class="row">
+            <button type="button" class="btn ghost" data-add="project">+ Add project</button>
+          </div>
+        </fieldset>
 
-          <!-- Experience -->
-          <section id="r-experience" class="r-section"></section>
+        <fieldset class="group">
+          <legend>Other</legend>
+          <div id="linksList" class="list"></div>
+          <div class="row">
+            <button type="button" class="btn ghost" data-add="link">+ Add link</button>
+            <button type="button" class="btn ghost" data-add="language">+ Add language</button>
+            <button type="button" class="btn ghost" data-add="cert">+ Add certification</button>
+            <button type="button" class="btn ghost" data-add="activity">+ Add activity</button>
+          </div>
+        </fieldset>
+      </form>
+    </section>
 
-          <!-- Projects -->
-          <section id="r-projects" class="r-section"></section>
+    <!-- Preview -->
+    <section class="panel preview" aria-label="Preview">
+      <article id="resume" class="resume-card" role="document">
+        <header class="r-header">
+          <div class="r-left">
+            <h1 id="r-name"></h1>
+            <div id="r-title" class="muted"></div>
+            <div id="r-meta" class="muted smallcaps"></div>
+          </div>
+          <div class="r-right">
+            <div id="r-skills" class="skill-chips"></div>
+          </div>
+        </header>
 
-          <!-- Education -->
-          <section id="r-education" class="r-section"></section>
+        <section id="r-summary" class="r-section"></section>
+        <section id="r-experience" class="r-section"></section>
+        <section id="r-projects" class="r-section"></section>
+        <section id="r-education" class="r-section"></section>
+        <section id="r-other" class="r-section"></section>
+      </article>
+    </section>
+  </main>
 
-          <!-- Skills -->
-          <section id="r-skills" class="r-section"></section>
+  <footer class="no-print small muted center">
+    Polished Resume Maker — saves nothing locally (except theme). Use browser Print to save PDF.
+  </footer>
 
-          <!-- Languages -->
-          <section id="r-languages" class="r-section"></section>
-
-          <!-- Certifications -->
-          <section id="r-certifications" class="r-section"></section>
-
-          <!-- Activities -->
-          <section id="r-activities" class="r-section"></section>
-        </article>
-      </section>
-    </main>
-
-    <script src="app.js" defer></script>
-  </body>
+  <script src="app.js" defer></script>
+</body>
 </html>

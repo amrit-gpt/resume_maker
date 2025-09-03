@@ -1,205 +1,387 @@
-let educationCount = 0;
-let experienceCount = 0;
-let projectCount = 0;
-let certificationCount = 0;
-let extraCurricularCount = 0;
-let languageCount = 0;
-let linkCount = 0;
+/* Polished Resume Maker — app logic (vanilla JS)
+   - No sample values
+   - Dynamic sections
+   - Live preview
+   - Theme remembered in localStorage
+*/
 
-function addEducationEntry() {
-    educationCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'education-' + educationCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="School/Institution" data-field="school">
-        <input type="text" placeholder="Date" data-field="date">
-        <input type="text" placeholder="Degree/Board" data-field="degree">
-        <input type="text" placeholder="Percentage/CGPA" data-field="percentage">
-        <button onclick="removeEntry('education-${educationCount}')">Remove</button>
+(() => {
+  const $ = (s, ctx = document) => ctx.querySelector(s);
+  const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
+
+  // Elements
+  const form = $("#editorForm");
+  const resume = $("#resume");
+  const themeToggle = $("#themeToggle");
+  const exportBtn = $("#exportPdf");
+  const resetBtn = $("#resetBtn");
+
+  // Dynamic containers
+  const expList = $("#expList");
+  const eduList = $("#eduList");
+  const projList = $("#projList");
+  const linksList = $("#linksList");
+  const skillsTags = $("#skillsTags");
+
+  // State
+  const state = {
+    basic: {
+      name: "",
+      title: "",
+      email: "",
+      phone: "",
+      location: "",
+      summary: ""
+    },
+    skills: [],
+    experience: [],
+    education: [],
+    projects: [],
+    links: [],
+    languages: [],
+    certifications: [],
+    activities: []
+  };
+
+  // Theme
+  const savedTheme = localStorage.getItem("rm.theme");
+  if (savedTheme === "dark") document.documentElement.classList.add("dark");
+  themeToggle.textContent = document.documentElement.classList.contains("dark") ? "Light" : "Dark";
+  themeToggle.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("rm.theme", isDark ? "dark" : "light");
+    themeToggle.textContent = isDark ? "Light" : "Dark";
+  });
+
+  // Export
+  exportBtn.addEventListener("click", () => window.print());
+
+  // Reset
+  resetBtn.addEventListener("click", () => {
+    if (!confirm("Clear all fields and resume preview?")) return;
+    form.reset();
+    state.basic = { name:"", title:"", email:"", phone:"", location:"", summary:"" };
+    state.skills = [];
+    state.experience = [];
+    state.education = [];
+    state.projects = [];
+    state.links = [];
+    state.languages = [];
+    state.certifications = [];
+    state.activities = [];
+    clearLists();
+    render();
+  });
+
+  function clearLists() {
+    [expList, eduList, projList, linksList, skillsTags].forEach(el => el.innerHTML = "");
+  }
+
+  // Basic inputs -> update state & render
+  ["name","title","email","phone","location","summary"].forEach(name => {
+    const el = form[name];
+    el.addEventListener("input", e => {
+      state.basic[name] = e.target.value.trim();
+      render();
+    });
+  });
+
+  // Skills input (enter to add)
+  const skillInput = form.skillInput;
+  skillInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const v = skillInput.value.trim();
+      if (v) {
+        addSkill(v);
+        skillInput.value = "";
+      }
+    }
+  });
+
+  function addSkill(label) {
+    if (!label) return;
+    if (state.skills.includes(label)) return;
+    state.skills.push(label);
+    renderSkills();
+    render();
+  }
+  function removeSkill(idx) {
+    state.skills.splice(idx,1);
+    renderSkills();
+    render();
+  }
+  function renderSkills() {
+    skillsTags.innerHTML = "";
+    state.skills.forEach((s,i) => {
+      const el = document.createElement("div");
+      el.className = "tag";
+      el.innerHTML = `<span>${escapeHtml(s)}</span><button title="Remove" class="removeBtn" data-idx="${i}">✕</button>`;
+      skillsTags.appendChild(el);
+    });
+    // bind remove
+    $$(".removeBtn", skillsTags).forEach(btn => {
+      btn.addEventListener("click", () => removeSkill(Number(btn.dataset.idx)));
+    });
+  }
+
+  // Generic add/remove for dynamic lists (experience, education, project, link, language, cert, activity)
+  const addMap = {
+    experience: createExperienceItem,
+    education: createEducationItem,
+    project: createProjectItem,
+    link: createLinkItem,
+    language: createLanguageItem,
+    cert: createCertItem,
+    activity: createActivityItem
+  };
+
+  $$("[data-add]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.add;
+      const ctr = {
+        experience: expList, education: eduList, project: projList,
+        link: linksList, language: linksList, cert: linksList, activity: linksList
+      }[key];
+      if (!ctr) return;
+      const idx = (ctr.children.length);
+      const item = addMap[key]();
+      ctr.appendChild(item.dom);
+      bindItemInputs(item, key, idx);
+      render();
+    });
+  });
+
+  // Create DOM blocks for each type (all inputs blank)
+  function createExperienceItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Experience</div>
+      <label class="field"><input data-k="role" placeholder="Role / Title"></label>
+      <label class="field"><input data-k="company" placeholder="Company"></label>
+      <label class="field"><input data-k="location" placeholder="Location"></label>
+      <div class="split" style="margin-top:6px">
+        <label class="field"><input data-k="start" placeholder="Start (e.g. Jul 2023)"></label>
+        <label class="field"><input data-k="end" placeholder="End (or Present)"></label>
+      </div>
+      <label class="field"><textarea data-k="bullets" rows="3" placeholder="Bullets — one per line"></textarea></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('education-entries').appendChild(entry);
-}
+    return { dom, empty: { role:"", company:"", location:"", start:"", end:"", bullets:"" } };
+  }
 
-function addExperienceEntry() {
-    experienceCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'experience-' + experienceCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="Company" data-field="company">
-        <input type="text" placeholder="Dates" data-field="dates">
-        <input type="text" placeholder="Role" data-field="role">
-        <input type="text" placeholder="Location" data-field="location">
-        <textarea placeholder="Bullet points (one per line)" data-field="bullets" rows="3"></textarea>
-        <button onclick="removeEntry('experience-${experienceCount}')">Remove</button>
+  function createEducationItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Education</div>
+      <label class="field"><input data-k="degree" placeholder="Degree / Program"></label>
+      <label class="field"><input data-k="institution" placeholder="Institution"></label>
+      <div class="split" style="margin-top:6px">
+        <label class="field"><input data-k="start" placeholder="Start"></label>
+        <label class="field"><input data-k="end" placeholder="End"></label>
+      </div>
+      <label class="field"><input data-k="score" placeholder="Score / Grade (optional)"></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('experience-entries').appendChild(entry);
-}
+    return { dom, empty: { degree:"", institution:"", start:"", end:"", score:"" } };
+  }
 
-function addProjectEntry() {
-    projectCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'project-' + projectCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="Project Name" data-field="name">
-        <input type="text" placeholder="Technologies" data-field="tech">
-        <input type="text" placeholder="Description" data-field="description">
-        <button onclick="removeEntry('project-${projectCount}')">Remove</button>
+  function createProjectItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Project</div>
+      <label class="field"><input data-k="name" placeholder="Project name"></label>
+      <label class="field"><input data-k="desc" placeholder="Short description or tech stack"></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('projects-entries').appendChild(entry);
-}
+    return { dom, empty: { name:"", desc:"" } };
+  }
 
-function addCertificationEntry() {
-    certificationCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'certification-' + certificationCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="Certification Name" data-field="name">
-        <input type="text" placeholder="Issuer" data-field="issuer">
-        <input type="text" placeholder="Link/ID (optional)" data-field="link">
-        <button onclick="removeEntry('certification-${certificationCount}')">Remove</button>
+  function createLinkItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Link</div>
+      <label class="field"><input data-k="label" placeholder="Label (GitHub, LinkedIn)"></label>
+      <label class="field"><input data-k="url" placeholder="https://"></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('certifications-entries').appendChild(entry);
-}
+    return { dom, empty: { label:"", url:"" } };
+  }
 
-function addExtraCurricularEntry() {
-    extraCurricularCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'extra-curricular-' + extraCurricularCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="Activity" data-field="activity">
-        <button onclick="removeEntry('extra-curricular-${extraCurricularCount}')">Remove</button>
+  function createLanguageItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Language</div>
+      <label class="field"><input data-k="name" placeholder="Language"></label>
+      <label class="field"><input data-k="level" placeholder="Proficiency (e.g. Native, Fluent)"></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('extra-curricular-entries').appendChild(entry);
-}
+    return { dom, empty: { name:"", level:"" } };
+  }
 
-function addLanguageEntry() {
-    languageCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'language-' + languageCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="Language" data-field="language">
-        <input type="text" placeholder="Proficiency" data-field="proficiency">
-        <button onclick="removeEntry('language-${languageCount}')">Remove</button>
+  function createCertItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Certification</div>
+      <label class="field"><input data-k="name" placeholder="Certification"></label>
+      <label class="field"><input data-k="issuer" placeholder="Issuer"></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('languages-entries').appendChild(entry);
-}
+    return { dom, empty: { name:"", issuer:"" } };
+  }
 
-function addLinkEntry() {
-    linkCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    entry.id = 'link-' + linkCount;
-    entry.innerHTML = `
-        <input type="text" placeholder="Link Name (e.g., LinkedIn)" data-field="name">
-        <input type="text" placeholder="URL" data-field="url">
-        <button onclick="removeEntry('link-${linkCount}')">Remove</button>
+  function createActivityItem(){
+    const dom = document.createElement("div");
+    dom.className = "item";
+    dom.innerHTML = `
+      <div class="mini">Activity</div>
+      <label class="field"><input data-k="name" placeholder="Activity / Volunteer"></label>
+      <label class="field"><input data-k="note" placeholder="Note (role, years)"></label>
+      <div class="row"><button class="btn ghost remove" type="button">Remove</button></div>
     `;
-    document.getElementById('links-entries').appendChild(entry);
-}
+    return { dom, empty: { name:"", note:"" } };
+  }
 
-function removeEntry(id) {
-    const entry = document.getElementById(id);
-    entry.remove();
-}
+  // Keep data arrays aligned with DOM order — when adding we push empty; when removing splice.
+  function bindItemInputs(item, type, index) {
+    // add empty placeholder in state
+    const arr = getStateArray(type);
+    arr.push(item.empty);
 
-function generateResume() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const location = document.getElementById('location').value;
-    const summary = document.getElementById('summary').value;
-    const skills = document.getElementById('skills').value;
-
-    let html = `<h1>${name}</h1>
-        <p>${email} | ${phone} | ${location}</p>
-        <h2>Summary</h2>
-        <p>${summary}</p>`;
-
-    // Education
-    html += '<h2>Education</h2>';
-    const educationEntries = document.querySelectorAll('#education-entries .entry');
-    educationEntries.forEach(entry => {
-        const school = entry.querySelector('[data-field="school"]').value;
-        const date = entry.querySelector('[data-field="date"]').value;
-        const degree = entry.querySelector('[data-field="degree"]').value;
-        const percentage = entry.querySelector('[data-field="percentage"]').value;
-        html += `<p><strong>${school}</strong> - ${date}<br>${degree} · ${percentage}</p>`;
+    const dom = item.dom;
+    const inputs = $$("[data-k]", dom);
+    inputs.forEach(inp => {
+      inp.addEventListener("input", () => {
+        // compute index by DOM children order
+        const parent = dom.parentElement;
+        const idx = Array.prototype.indexOf.call(parent.children, dom);
+        const key = inp.dataset.k;
+        getStateArray(type)[idx][key] = inp.value.trim();
+        render();
+      });
     });
 
-    // Experience
-    html += '<h2>Experience</h2>';
-    const experienceEntries = document.querySelectorAll('#experience-entries .entry');
-    experienceEntries.forEach(entry => {
-        const company = entry.querySelector('[data-field="company"]').value;
-        const dates = entry.querySelector('[data-field="dates"]').value;
-        const role = entry.querySelector('[data-field="role"]').value;
-        const location = entry.querySelector('[data-field="location"]').value;
-        const bullets = entry.querySelector('[data-field="bullets"]').value.split('\n').filter(b => b.trim());
-        html += `<p><strong>${company}</strong><br>${dates}<br>${role}<br>${location}</p><ul>`;
-        bullets.forEach(bullet => {
-            html += `<li>${bullet}</li>`;
-        });
-        html += '</ul>';
+    // remove button
+    const rem = dom.querySelector(".remove");
+    rem.addEventListener("click", () => {
+      const parent = dom.parentElement;
+      const idx = Array.prototype.indexOf.call(parent.children, dom);
+      getStateArray(type).splice(idx,1);
+      dom.remove();
+      render();
     });
+  }
 
-    // Projects
-    html += '<h2>Projects</h2>';
-    const projectEntries = document.querySelectorAll('#projects-entries .entry');
-    projectEntries.forEach(entry => {
-        const name = entry.querySelector('[data-field="name"]').value;
-        const tech = entry.querySelector('[data-field="tech"]').value;
-        const description = entry.querySelector('[data-field="description"]').value;
-        html += `<p><strong>${name}</strong> - ${tech}<br>${description}</p>`;
-    });
+  function getStateArray(key){
+    switch(key){
+      case "experience": return state.experience;
+      case "education": return state.education;
+      case "project": return state.projects;
+      case "link": return state.links;
+      case "language": return state.languages;
+      case "cert": return state.certifications;
+      case "activity": return state.activities;
+      default: return [];
+    }
+  }
 
-    // Certifications
-    html += '<h2>Certifications</h2><ul>';
-    const certificationEntries = document.querySelectorAll('#certifications-entries .entry');
-    certificationEntries.forEach(entry => {
-        const name = entry.querySelector('[data-field="name"]').value;
-        const issuer = entry.querySelector('[data-field="issuer"]').value;
-        const link = entry.querySelector('[data-field="link"]').value;
-        html += `<li>${name} | Certificate - ${issuer}${link ? ' · ' + link : ''}</li>`;
-    });
-    html += '</ul>';
-
-    // Extra Curricular
-    html += '<h2>Extra Curricular Activities</h2><ul>';
-    const extraEntries = document.querySelectorAll('#extra-curricular-entries .entry');
-    extraEntries.forEach(entry => {
-        const activity = entry.querySelector('[data-field="activity"]').value;
-        html += `<li>${activity}</li>`;
-    });
-    html += '</ul>';
+  // Render preview
+  function render(){
+    // Header
+    $("#r-name").textContent = state.basic.name || "";
+    $("#r-title").textContent = state.basic.title || "";
+    const metaParts = [];
+    if (state.basic.email) metaParts.push(state.basic.email);
+    if (state.basic.phone) metaParts.push(state.basic.phone);
+    if (state.basic.location) metaParts.push(state.basic.location);
+    $("#r-meta").textContent = metaParts.join(" • ");
 
     // Skills
-    html += `<h2>Skills</h2><p>${skills}</p>`;
-
-    // Languages
-    html += '<h2>Languages</h2><ul>';
-    const languageEntries = document.querySelectorAll('#languages-entries .entry');
-    languageEntries.forEach(entry => {
-        const language = entry.querySelector('[data-field="language"]').value;
-        const proficiency = entry.querySelector('[data-field="proficiency"]').value;
-        html += `<li>${language} [${proficiency}]</li>`;
+    const skillsContainer = $("#r-skills");
+    skillsContainer.innerHTML = "";
+    state.skills.forEach(s => {
+      const el = document.createElement("div");
+      el.className = "skill-chip";
+      el.textContent = s;
+      skillsContainer.appendChild(el);
     });
-    html += '</ul>';
 
-    // Links
-    html += '<h2>Links</h2><ul>';
-    const linkEntries = document.querySelectorAll('#links-entries .entry');
-    linkEntries.forEach(entry => {
-        const name = entry.querySelector('[data-field="name"]').value;
-        const url = entry.querySelector('[data-field="url"]').value;
-        html += `<li>${name}, ${url}</li>`;
-    });
-    html += '</ul>';
+    // Summary
+    const sum = $("#r-summary");
+    if (state.basic.summary) {
+      sum.innerHTML = `<h3>Summary</h3><div class="small">${escapeHtml(state.basic.summary)}</div>`;
+    } else sum.innerHTML = "";
 
-    document.getElementById('resume-preview').innerHTML = html;
-}
+    // Experience
+    const exp = $("#r-experience");
+    if (state.experience.length) {
+      exp.innerHTML = `<h3>Experience</h3>` + state.experience.map(item => {
+        const bullets = (item.bullets || "").split("\n").map(b => b.trim()).filter(Boolean);
+        return `<div class="resume-item">
+            <div class="left"><strong>${escapeHtml(item.role || "")}${item.company ? " — "+escapeHtml(item.company) : ""}</strong>
+              ${bullets.length ? `<ul>${bullets.map(b=>`<li>${escapeHtml(b)}</li>`).join("")}</ul>` : ""}
+            </div>
+            <div class="right small">${escapeHtml(item.location||"")}${(item.start||item.end) ? "<br>"+escapeHtml(range(item.start,item.end)) : ""}</div>
+          </div>`;
+      }).join("") ;
+    } else exp.innerHTML = "";
+
+    // Projects
+    const proj = $("#r-projects");
+    if (state.projects.length) {
+      proj.innerHTML = `<h3>Projects</h3>` + state.projects.map(p => {
+        return `<div class="resume-item"><div class="left"><strong>${escapeHtml(p.name||"")}</strong><div class="small">${escapeHtml(p.desc||"")}</div></div></div>`;
+      }).join("");
+    } else proj.innerHTML = "";
+
+    // Education
+    const edu = $("#r-education");
+    if (state.education.length) {
+      edu.innerHTML = `<h3>Education</h3>` + state.education.map(e => {
+        return `<div class="resume-item"><div class="left"><strong>${escapeHtml(e.degree||"")}${e.institution ? " — "+escapeHtml(e.institution):""}</strong></div>
+                <div class="right small">${escapeHtml(range(e.start,e.end))}${e.score ? "<br>"+escapeHtml(e.score) : ""}</div></div>`;
+      }).join("");
+    } else edu.innerHTML = "";
+
+    // Other (links, languages, certs, activities)
+    const other = $("#r-other");
+    const parts = [];
+    if (state.links.length) {
+      parts.push(`<div><h3>Links</h3>${state.links.map(l => `<div class="small">${l.url ? `<a href="${escapeAttr(l.url)}" target="_blank" rel="noreferrer">${escapeHtml(l.label || l.url)}</a>` : escapeHtml(l.label)}</div>`).join("")}</div>`);
+    }
+    if (state.languages.length) {
+      parts.push(`<div><h3>Languages</h3>${state.languages.map(l => `<div class="small">${escapeHtml(l.name)}${l.level ? " — "+escapeHtml(l.level) : ""}</div>`).join("")}</div>`);
+    }
+    if (state.certifications.length) {
+      parts.push(`<div><h3>Certifications</h3>${state.certifications.map(c => `<div class="small">${escapeHtml(c.name)}${c.issuer ? " — "+escapeHtml(c.issuer) : ""}</div>`).join("")}</div>`);
+    }
+    if (state.activities.length) {
+      parts.push(`<div><h3>Activities</h3>${state.activities.map(a => `<div class="small">${escapeHtml(a.name)}${a.note ? " — "+escapeHtml(a.note) : ""}</div>`).join("")}</div>`);
+    }
+    other.innerHTML = parts.join("");
+  }
+
+  // small util
+  function range(a,b){
+    if (!a && !b) return "";
+    if (a && b) return `${a} — ${b}`;
+    return a || b || "";
+  }
+  function escapeHtml(s){
+    return (s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]));
+  }
+  function escapeAttr(s){ return escapeHtml(s).replace(/"/g,'&quot;') }
+
+  // initial render
+  render();
+
+  // expose some helpers (optional)
+  window._rm = { state, render };
+
+})();
