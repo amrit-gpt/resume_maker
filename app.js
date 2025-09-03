@@ -1,6 +1,38 @@
 const { jsPDF } = window.jspdf;
 
-// Section helpers
+// Containers
+const eduList = document.getElementById("educationList");
+const expList = document.getElementById("experienceList");
+const projList = document.getElementById("projectsList");
+
+// Field creators
+function addEdu() {
+  const div = document.createElement("div");
+  div.innerHTML = `<input placeholder="Degree, Institute, Duration" class="edu" />`;
+  eduList.appendChild(div);
+}
+function addExp() {
+  const div = document.createElement("div");
+  div.innerHTML = `<input placeholder="Role, Company, Duration" class="exp" />`;
+  expList.appendChild(div);
+}
+function addProj() {
+  const div = document.createElement("div");
+  div.innerHTML = `<input placeholder="Project, Tech, Description" class="proj" />`;
+  projList.appendChild(div);
+}
+
+// Buttons
+document.getElementById("addEdu").onclick = () => addEdu();
+document.getElementById("addExp").onclick = () => addExp();
+document.getElementById("addProj").onclick = () => addProj();
+
+// Default one field each
+addEdu();
+addExp();
+addProj();
+
+// PDF Section helper
 function addSection(doc, title, items, y) {
   if (!items || items.length === 0) return y;
   doc.setFont("helvetica", "bold");
@@ -18,6 +50,7 @@ function addSection(doc, title, items, y) {
   return y;
 }
 
+// Download PDF
 document.getElementById("downloadBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value || "Your Name";
   const title = document.getElementById("title").value || "";
@@ -26,9 +59,9 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   const location = document.getElementById("location").value || "";
   const about = document.getElementById("about").value || "";
 
-  const educations = [...document.querySelectorAll(".edu")].map(e => e.value).filter(v=>v);
-  const experiences = [...document.querySelectorAll(".exp")].map(e => e.value).filter(v=>v);
-  const projects = [...document.querySelectorAll(".proj")].map(e => e.value).filter(v=>v);
+  const educations = [...document.querySelectorAll(".edu")].map(e => e.value).filter(Boolean);
+  const experiences = [...document.querySelectorAll(".exp")].map(e => e.value).filter(Boolean);
+  const projects = [...document.querySelectorAll(".proj")].map(e => e.value).filter(Boolean);
 
   const skills = document.getElementById("skills").value || "";
   const links = document.getElementById("links").value || "";
@@ -43,19 +76,19 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   y += 8;
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
-  doc.text(`${title}`, 20, y);
+  doc.text(title, 20, y);
   y += 10;
   doc.text(`${email} | ${phone} | ${location}`, 20, y);
   y += 14;
 
-  // Sections in order
-  y = addSection(doc, "Summary", [about], y);
+  // Sections
   y = addSection(doc, "Education", educations, y);
   y = addSection(doc, "Experience", experiences, y);
   y = addSection(doc, "Projects", projects, y);
 
   if (skills) y = addSection(doc, "Skills", [skills], y);
   if (links) y = addSection(doc, "Links", [links], y);
+  if (about) y = addSection(doc, "About", [about], y);
 
   // Footer
   doc.setFontSize(10);

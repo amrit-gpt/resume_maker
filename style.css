@@ -10,7 +10,7 @@ body {
 
 .app {
   width: 100%;
-  max-width: 700px;
+  max-width: 750px;
 }
 
 .app-header {
@@ -29,7 +29,7 @@ button {
   background: #1c252b;
   border: 1px solid #333;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #e6eef3;
   cursor: pointer;
 }
@@ -40,31 +40,38 @@ button:hover {
 
 .form-panel {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 input, textarea {
   width: 100%;
   background: #14191d;
   border: 1px solid #222;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px;
   color: #e6eef3;
   font-size: 14px;
 }
+
 textarea {
   min-height: 60px;
   resize: vertical;
 }
-label {
-  font-size: 13px;
-  color: #9aa6b2;
+
+h3 {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #7dd3fc;
   font-weight: 600;
 }
 
 .add-btn {
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin-top: 6px;
   font-size: 13px;
   padding: 6px 10px;
+  background: #0f1417;
+  border: 1px dashed #444;
+}
+.add-btn:hover {
+  border-color: #7dd3fc;
 }
