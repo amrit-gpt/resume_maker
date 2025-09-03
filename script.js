@@ -53,26 +53,27 @@ function updatePreview() {
   projVal.forEach(p => { if (p.trim() !== "") projDiv.appendChild(createDiv(p)); });
 }
 
-function createLi(text){
-  const li = document.createElement("li");
-  li.innerText = text.trim();
-  return li;
-}
-
 function createDiv(text){
   const div = document.createElement("div");
   div.innerText = text.trim();
+  div.classList.add("preview-item");
   return div;
 }
 
-// Export PDF
+function createLi(text){
+  const li = document.createElement("li");
+  li.innerText = text.trim();
+  li.classList.add("preview-item");
+  return li;
+}
+
 function generatePDF() {
   const element = document.getElementById("resume-preview");
   const opt = {
-    margin: 0,
+    margin: 10,
     filename: 'resume.pdf',
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
+    html2canvas: { scale: 2, backgroundColor: "#ffffff" },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
   html2pdf().set(opt).from(element).save();

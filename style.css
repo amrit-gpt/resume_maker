@@ -98,3 +98,8 @@ ul {
   list-style-type: disc;
   padding-left: 20px;
 }
+/* Ensure dynamically created divs and list items are visible and formatted */
+.preview-item {
+  margin-bottom: 5px;
+  color: #111; /* dark text for visibility */
+}
