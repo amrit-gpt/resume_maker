@@ -3,135 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title> 2 MIN Resume Maker </title>
+  <title>Resume Maker</title>
 
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <!-- stylesheet -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 
-  <!-- html2pdf -->
-  <script src="https://unpkg.com/html2pdf.js@0.9.3/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="app">
     <header class="app-header">
       <h1>Resume Maker</h1>
-      <div class="header-actions">
-        <button id="downloadBtn">Download PDF</button>
-      </div>
+      <button id="downloadBtn">Download PDF</button>
     </header>
 
-    <main class="container">
-      <!-- Form column -->
-      <section class="panel form-panel">
-        <form id="resumeForm" autocomplete="off">
-          <div class="field-row">
-            <input id="name" placeholder="Full name" />
-            <input id="title" placeholder="Role / Title" />
-          </div>
+    <main class="form-panel">
+      <form id="resumeForm">
+        <input id="name" placeholder="Full Name" />
+        <input id="title" placeholder="Role / Title" />
+        <input id="email" placeholder="Email" />
+        <input id="phone" placeholder="Phone" />
+        <input id="location" placeholder="Location" />
 
-          <div class="field-row">
-            <input id="email" placeholder="Email" />
-            <input id="phone" placeholder="Phone" />
-          </div>
+        <label>About</label>
+        <textarea id="About" placeholder="Brief professional summary"></textarea>
 
-          <div class="field-row">
-            <input id="location" placeholder="Location" />
-            <input id="website" placeholder="Portfolio / GitHub / LinkedIn" />
-          </div>
+        <label>Education</label>
+        <textarea id="education" placeholder="e.g. B.Tech CSE, SRM University, 2022-2026"></textarea>
 
-          <label class="label">Summary</label>
-          <textarea id="summary" placeholder="Short 2–3 line technical summary"></textarea>
+        <label>Experience</label>
+        <textarea id="experience" placeholder="e.g. Web Dev Intern, Company, 2024"></textarea>
 
-          <hr />
+        <label>Projects</label>
+        <textarea id="projects" placeholder="e.g. Portfolio Website using React"></textarea>
 
-          <div class="section-header">
-            <h3>Education</h3>
-            <button type="button" id="addEdu">+ Add</button>
-          </div>
-          <div id="educationList" class="repeat-list"></div>
+        <label>Skills</label>
+        <input id="skills" placeholder="Python, React, Docker" />
 
-          <hr />
-
-          <div class="section-header">
-            <h3>Experience</h3>
-            <button type="button" id="addExp">+ Add</button>
-          </div>
-          <div id="experienceList" class="repeat-list"></div>
-
-          <hr />
-
-          <div class="section-header">
-            <h3>Projects</h3>
-            <button type="button" id="addProj">+ Add</button>
-          </div>
-          <div id="projectsList" class="repeat-list"></div>
-
-          <hr />
-
-          <label class="label">Skills (comma separated)</label>
-          <input id="skills" placeholder="Python, React, Docker" />
-
-          <label class="label">Links (one per line)</label>
-          <textarea id="links" placeholder="https://github.com/username"></textarea>
-        </form>
-      </section>
-
-      <!-- Preview column -->
-      <section class="panel preview-panel" id="previewContainer">
-        <article id="resumePreview" class="resume">
-          <header class="resume-header">
-            <div>
-              <h2 id="pv-name"></h2>
-              <p id="pv-title" class="muted"></p>
-            </div>
-            <div class="contact">
-              <div id="pv-email" class="muted small"></div>
-              <div id="pv-phone" class="muted small"></div>
-              <div id="pv-location" class="muted small"></div>
-              <div id="pv-website" class="muted small"></div>
-            </div>
-          </header>
-
-          <section class="section">
-            <h4>Summary</h4>
-            <p id="pv-summary" class="section-text muted"></p>
-          </section>
-
-          <section class="section">
-            <h4>Experience</h4>
-            <div id="pv-experience"></div>
-          </section>
-
-          <section class="section">
-            <h4>Education</h4>
-            <div id="pv-education"></div>
-          </section>
-
-          <section class="section">
-            <h4>Projects</h4>
-            <div id="pv-projects"></div>
-          </section>
-
-          <section class="section two-col">
-            <div>
-              <h4>Skills</h4>
-              <p id="pv-skills"></p>
-            </div>
-            <div>
-              <h4>Links</h4>
-              <div id="pv-links" class="muted small"></div>
-            </div>
-          </section>
-        </article>
-      </section>
+        <label>Links</label>
+        <textarea id="links" placeholder="https://github.com/username"></textarea>
+      </form>
     </main>
-
-    <footer class="app-footer">
-      <small>Minimal • Dark • AMRITANSHU ADITYA @ 2025</small>
-    </footer>
   </div>
 
   <script src="app.js"></script>

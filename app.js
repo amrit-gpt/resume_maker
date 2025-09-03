@@ -1,154 +1,51 @@
-(function(){
-  const $ = sel => document.querySelector(sel);
+const { jsPDF } = window.jspdf;
 
-  const form = $('#resumeForm');
-  const downloadBtn = $('#downloadBtn');
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const name = document.getElementById("name").value;
+  const title = document.getElementById("title").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const location = document.getElementById("location").value;
+  const summary = document.getElementById("About").value;
+  const education = document.getElementById("education").value;
+  const experience = document.getElementById("experience").value;
+  const projects = document.getElementById("projects").value;
+  const skills = document.getElementById("skills").value;
+  const links = document.getElementById("links").value;
 
-  const pv = {
-    name: $('#pv-name'),
-    title: $('#pv-title'),
-    email: $('#pv-email'),
-    phone: $('#pv-phone'),
-    location: $('#pv-location'),
-    website: $('#pv-website'),
-    summary: $('#pv-summary'),
-    experience: $('#pv-experience'),
-    education: $('#pv-education'),
-    projects: $('#pv-projects'),
-    skills: $('#pv-skills'),
-    links: $('#pv-links')
-  };
+  const doc = new jsPDF();
 
-  const eduList = $('#educationList');
-  const expList = $('#experienceList');
-  const projList = $('#projectsList');
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text(name || "Your Name", 20, 20);
+  doc.setFontSize(12);
+  doc.text(title || "", 20, 30);
 
-  function createEduItem() {
-    const div = document.createElement('div');
-    div.className = 'repeat-item';
-    div.innerHTML = `
-      <div class="row">
-        <input placeholder="Degree" class="edu-degree"/>
-        <input placeholder="Institution" class="edu-institute"/>
-      </div>
-      <div class="row">
-        <input placeholder="Duration" class="edu-duration"/>
-        <input placeholder="Score" class="edu-score"/>
-        <button class="remove">Remove</button>
-      </div>
-    `;
-    div.querySelector('.remove').onclick = () => div.remove();
-    div.querySelectorAll('input').forEach(i => i.addEventListener('input', renderPreview));
-    return div;
+  doc.setFont("helvetica", "normal");
+  doc.text(`Email: ${email}`, 20, 40);
+  doc.text(`Phone: ${phone}`, 20, 48);
+  doc.text(`Location: ${location}`, 20, 56);
+
+  let y = 70;
+  function addSection(title, content) {
+    if (!content) return;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(title, 20, y);
+    y += 6;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    const split = doc.splitTextToSize(content, 170);
+    doc.text(split, 20, y);
+    y += split.length * 6 + 6;
   }
 
-  function createExpItem() {
-    const div = document.createElement('div');
-    div.className = 'repeat-item';
-    div.innerHTML = `
-      <div class="row">
-        <input placeholder="Role" class="exp-role"/>
-        <input placeholder="Company" class="exp-company"/>
-      </div>
-      <div class="row">
-        <input placeholder="Duration" class="exp-duration"/>
-        <button class="remove">Remove</button>
-      </div>
-      <textarea placeholder="Achievements" class="exp-desc"></textarea>
-    `;
-    div.querySelector('.remove').onclick = () => div.remove();
-    div.querySelectorAll('input,textarea').forEach(i => i.addEventListener('input', renderPreview));
-    return div;
-  }
+  addSection("About", summary);
+  addSection("Education", education);
+  addSection("Experience", experience);
+  addSection("Projects", projects);
+  addSection("Skills", skills);
+  addSection("Links", links);
 
-  function createProjItem() {
-    const div = document.createElement('div');
-    div.className = 'repeat-item';
-    div.innerHTML = `
-      <div class="row">
-        <input placeholder="Project name" class="proj-name"/>
-        <input placeholder="Tech used" class="proj-tech"/>
-      </div>
-      <div class="row">
-        <input placeholder="Link" class="proj-link"/>
-        <button class="remove">Remove</button>
-      </div>
-      <textarea placeholder="Description" class="proj-desc"></textarea>
-    `;
-    div.querySelector('.remove').onclick = () => div.remove();
-    div.querySelectorAll('input,textarea').forEach(i => i.addEventListener('input', renderPreview));
-    return div;
-  }
-
-  $('#addEdu').onclick = () => eduList.appendChild(createEduItem());
-  $('#addExp').onclick = () => expList.appendChild(createExpItem());
-  $('#addProj').onclick = () => projList.appendChild(createProjItem());
-
-  eduList.appendChild(createEduItem());
-  expList.appendChild(createExpItem());
-  projList.appendChild(createProjItem());
-
-  form.addEventListener('input', renderPreview);
-
-  function renderPreview(){
-    pv.name.textContent = $('#name').value;
-    pv.title.textContent = $('#title').value;
-    pv.email.textContent = $('#email').value;
-    pv.phone.textContent = $('#phone').value;
-    pv.location.textContent = $('#location').value;
-    pv.website.textContent = $('#website').value;
-    pv.summary.textContent = $('#summary').value;
-
-    pv.experience.innerHTML = '';
-    expList.querySelectorAll('.repeat-item').forEach(item=>{
-      const role = item.querySelector('.exp-role').value;
-      const company = item.querySelector('.exp-company').value;
-      const duration = item.querySelector('.exp-duration').value;
-      const desc = item.querySelector('.exp-desc').value;
-      if(role||company||duration||desc){
-        pv.experience.innerHTML += `<div class="pv-item"><div class="meta">${role} @ ${company} (${duration})</div><div class="muted">${desc}</div></div>`;
-      }
-    });
-
-    pv.education.innerHTML = '';
-    eduList.querySelectorAll('.repeat-item').forEach(item=>{
-      const degree = item.querySelector('.edu-degree').value;
-      const inst = item.querySelector('.edu-institute').value;
-      const dur = item.querySelector('.edu-duration').value;
-      const score = item.querySelector('.edu-score').value;
-      if(degree||inst||dur||score){
-        pv.education.innerHTML += `<div class="pv-item"><div class="meta">${degree} @ ${inst} (${dur})</div><div class="muted">${score}</div></div>`;
-      }
-    });
-
-    pv.projects.innerHTML = '';
-    projList.querySelectorAll('.repeat-item').forEach(item=>{
-      const name = item.querySelector('.proj-name').value;
-      const tech = item.querySelector('.proj-tech').value;
-      const link = item.querySelector('.proj-link').value;
-      const desc = item.querySelector('.proj-desc').value;
-      if(name||tech||link||desc){
-        pv.projects.innerHTML += `<div class="pv-item"><div class="meta">${name} • ${tech}</div><div class="muted">${desc}${link?('<br/><a href="'+link+'" target="_blank">'+link+'</a>'):''}</div></div>`;
-      }
-    });
-
-    pv.skills.textContent = $('#skills').value;
-    pv.links.textContent = $('#links').value;
-  }
-
-  renderPreview();
-
-  // PDF download
-  downloadBtn.addEventListener('click', () => {
-    const element = document.getElementById('resumePreview');
-    const opt = {
-      margin: 12,
-      filename: ($('#name').value || 'resume') + '.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-  });
-
-})();
+  doc.save((name || "resume") + ".pdf");
+});
