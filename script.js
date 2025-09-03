@@ -1,9 +1,7 @@
 function generatePDF() {
-  // Create a temporary container
-  const resumeContainer = document.createElement('div');
-  resumeContainer.style.padding = '20px';
-  resumeContainer.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-  resumeContainer.style.color = '#111';
+  // Get the hidden container element from the HTML
+  const resumeContainer = document.getElementById('pdf-content');
+  resumeContainer.innerHTML = ''; // Clear previous content to avoid duplicates
 
   // Helper functions
   function createDiv(text) {
@@ -20,7 +18,9 @@ function generatePDF() {
   }
 
   function appendSection(title, lines) {
-    if (!lines || lines.length === 0) return;
+    const filteredLines = lines.filter(line => line.trim() !== '');
+    if (filteredLines.length === 0) return;
+    
     const h2 = document.createElement('h2');
     h2.textContent = title;
     h2.style.borderBottom = '1px solid #333';
@@ -28,35 +28,46 @@ function generatePDF() {
     h2.style.marginBottom = '8px';
     resumeContainer.appendChild(h2);
 
-    lines.forEach(line => {
-      if (line.startsWith('-')) {
+    const contentDiv = document.createElement('div');
+    
+    filteredLines.forEach(line => {
+      if (line.trim().startsWith('-')) {
         const ul = document.createElement('ul');
-        ul.appendChild(createLi(line.replace(/^-/, '').trim()));
-        resumeContainer.appendChild(ul);
+        const cleanedLine = line.trim().replace(/^-/, '').trim();
+        if (cleanedLine) {
+            ul.appendChild(createLi(cleanedLine));
+            contentDiv.appendChild(ul);
+        }
       } else {
-        resumeContainer.appendChild(createDiv(line));
+        contentDiv.appendChild(createDiv(line));
       }
     });
+    resumeContainer.appendChild(contentDiv);
   }
 
-  // Collect data from form
-  appendSection('Name', [document.getElementById('name').value]);
-  appendSection('Email', [document.getElementById('email').value]);
-  appendSection('Phone', [document.getElementById('phone').value]);
-  appendSection('Location', [document.getElementById('location').value]);
-  appendSection('LinkedIn', [document.getElementById('linkedin').value]);
-  appendSection('GitHub', [document.getElementById('github').value]);
-  appendSection('Portfolio', [document.getElementById('portfolio').value]);
-  appendSection('Summary', [document.getElementById('summary').value]);
+  // Personal Information
+  const personalInfo = document.createElement('div');
+  personalInfo.innerHTML = `
+    <h1 style="font-size: 24px; margin-bottom: 5px;">${document.getElementById('name').value}</h1>
+    <p style="margin: 0; font-size: 14px; color: #555;">${document.getElementById('email').value} | ${document.getElementById('phone').value} | ${document.getElementById('location').value}</p>
+    <p style="margin: 0; font-size: 14px; color: #555;">
+      <a href="${document.getElementById('linkedin').value}" style="color: #0077B5;">LinkedIn</a> |
+      <a href="${document.getElementById('github').value}" style="color: #333;">GitHub</a> |
+      <a href="${document.getElementById('portfolio').value}" style="color: #333;">Portfolio</a>
+    </p>
+  `;
+  resumeContainer.appendChild(personalInfo);
 
+  // Collect data and append sections
+  appendSection('Summary', [document.getElementById('summary').value]);
   appendSection('Skills', document.getElementById('skills').value.split(','));
   appendSection('Languages', document.getElementById('languages').value.split(','));
-  appendSection('Certifications', document.getElementById('certifications').value.split('\n'));
   appendSection('Education', document.getElementById('education').value.split('\n'));
   appendSection('Experience', document.getElementById('experience').value.split('\n'));
   appendSection('Projects', document.getElementById('projects').value.split('\n'));
-
-  // Generate PDF from the temporary container
+  appendSection('Certifications', document.getElementById('certifications').value.split('\n'));
+  
+  // Generate PDF from the targeted container
   html2pdf().set({
     margin: 10,
     filename: 'resume.pdf',
