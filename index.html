@@ -3,67 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Builder</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <title>Simple Resume Maker</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>Resume Builder</h1>
-        <form id="resume-form">
-
-            <div class="card">
-                <h2>Personal Information</h2>
-                <input type="text" id="name" placeholder="Name" required>
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="tel" id="phone" placeholder="Phone">
-                <input type="text" id="location" placeholder="City, Country">
-                <input type="url" id="linkedin" placeholder="LinkedIn URL">
-                <input type="url" id="github" placeholder="GitHub URL">
-                <input type="url" id="portfolio" placeholder="Portfolio URL">
+        <div class="form-section">
+            <h2>Resume Maker</h2>
+            <div class="section" id="personal-info">
+                <h3>Personal Information</h3>
+                <input type="text" id="name" placeholder="Name">
+                <input type="text" id="email" placeholder="Email">
+                <input type="text" id="phone" placeholder="Phone">
+                <input type="text" id="location" placeholder="Location">
             </div>
-
-            <div class="card">
-                <h2>Summary</h2>
-                <textarea id="summary" rows="4" placeholder="A short professional summary"></textarea>
+            <div class="section">
+                <h3>Summary</h3>
+                <textarea id="summary" rows="4"></textarea>
             </div>
-
-            <div class="card">
-                <h2>Skills</h2>
-                <textarea id="skills" rows="2" placeholder="Comma-separated list (e.g., HTML, CSS, JavaScript)"></textarea>
+            <div class="section" id="education-section">
+                <h3>Education</h3>
+                <div id="education-entries"></div>
+                <button onclick="addEducationEntry()">Add Education</button>
             </div>
-
-            <div class="card">
-                <h2>Languages</h2>
-                <textarea id="languages" rows="2" placeholder="Comma-separated list (e.g., English, Hindi)"></textarea>
+            <div class="section" id="experience-section">
+                <h3>Experience</h3>
+                <div id="experience-entries"></div>
+                <button onclick="addExperienceEntry()">Add Experience</button>
             </div>
-
-            <div class="card">
-                <h2>Education</h2>
-                <textarea id="education" rows="5" placeholder="Degree | Institution | StartYear - EndYear"></textarea>
+            <div class="section" id="projects-section">
+                <h3>Projects</h3>
+                <div id="projects-entries"></div>
+                <button onclick="addProjectEntry()">Add Project</button>
             </div>
-
-            <div class="card">
-                <h2>Work Experience</h2>
-                <textarea id="work-experience" rows="8" placeholder="Role | Company | StartYear - EndYear&#10;- Bullet point 1&#10;- Bullet point 2"></textarea>
+            <div class="section" id="certifications-section">
+                <h3>Certifications</h3>
+                <div id="certifications-entries"></div>
+                <button onclick="addCertificationEntry()">Add Certification</button>
             </div>
-
-            <div class="card">
-                <h2>Projects</h2>
-                <textarea id="projects" rows="6" placeholder="Title | StartYear - EndYear | Short description"></textarea>
+            <div class="section" id="extra-curricular-section">
+                <h3>Extra Curricular Activities</h3>
+                <div id="extra-curricular-entries"></div>
+                <button onclick="addExtraCurricularEntry()">Add Activity</button>
             </div>
-
-            <div class="card">
-                <h2>Certifications</h2>
-                <textarea id="certifications" rows="5" placeholder="Title | Authority | Year"></textarea>
+            <div class="section">
+                <h3>Skills</h3>
+                <textarea id="skills" rows="2"></textarea>
             </div>
-
-            <button type="button" id="generate-pdf-btn">Generate PDF</button>
-        </form>
+            <div class="section" id="languages-section">
+                <h3>Languages</h3>
+                <div id="languages-entries"></div>
+                <button onclick="addLanguageEntry()">Add Language</button>
+            </div>
+            <div class="section" id="links-section">
+                <h3>Links</h3>
+                <div id="links-entries"></div>
+                <button onclick="addLinkEntry()">Add Link</button>
+            </div>
+            <button onclick="generateResume()">Generate Resume</button>
+        </div>
+        <div class="preview-section">
+            <h2>Preview</h2>
+            <div id="resume-preview"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
